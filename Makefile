@@ -1,4 +1,4 @@
-cc=clang++
+cc=g++
 exe=main
 obj=main.o MyString.o
 

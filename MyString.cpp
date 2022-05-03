@@ -1,6 +1,6 @@
 /*
  * @Author       : Gehrychiang
- * @LastEditTime : 2022-05-02 10:08:04
+ * @LastEditTime : 2022-05-03 09:51:26
  * @Website      : www.yilantingfeng.site
  * @E-mail       : gehrychiang@aliyun.com
  */
@@ -81,7 +81,7 @@ void MyString::operator=(char c)
     str[1] = '\0';
 }
 
-MyString &MyString::assgin(const MyString &s, size_t pos, size_t n)
+MyString &MyString::assign(const MyString &s, size_t pos, size_t n)
 {
     if (this == &s)
         return *this;
@@ -97,7 +97,7 @@ MyString &MyString::assgin(const MyString &s, size_t pos, size_t n)
     str[n] = '\0';
     return *this;
 }
-MyString &MyString::assgin(const char *s, size_t pos, size_t n)
+MyString &MyString::assign(const char *s, size_t pos, size_t n)
 {
     if (str)
         delete[] str;
@@ -111,7 +111,7 @@ MyString &MyString::assgin(const char *s, size_t pos, size_t n)
     str[n] = '\0';
     return *this;
 }
-MyString &MyString::assgin(size_t n, char c)
+MyString &MyString::assign(size_t n, char c)
 {
     if (str)
         delete[] str;
@@ -264,19 +264,21 @@ int MyString::compare(size_t pos, size_t n, const MyString &s, size_t pos2, size
 {
     __limit(pos, n, len);
     __limit(pos2, n2, s.len);
-    if (n == n2)
-        return strncmp(str + pos, s.str + pos2, std::min(n, n2));
-    else
-        return n < n2;
+    int ret;
+    ret = strncmp(str + pos, s.str + pos2, std::min(n, n2));
+    if (ret == 0)
+        ret = __compare(n, n2);
+    return ret;
 }
 int MyString::compare(size_t pos, size_t n, const char *s, size_t pos2, size_t n2) const
 {
     __limit(pos, n, len);
     __limit(pos2, n2, strlen(s));
-    if (n == n2)
-        return strncmp(str + pos, s + pos2, std::min(n, n2));
-    else
-        return n < n2;
+    int ret;
+    ret = strncmp(str + pos, s + pos2, std::min(n, n2));
+    if (ret == 0)
+        ret = __compare(n, n2);
+    return ret;
 }
 
 MyString &MyString::replace(size_t pos, size_t n, const MyString &s, size_t pos2, size_t n2)
@@ -315,7 +317,7 @@ MyString &MyString::replace(size_t pos, size_t n, const char *s, size_t pos2, si
     delete[] tmp;
     return *this;
 }
-MyString &MyString::replace(size_t pos, size_t n, char c, size_t n2)
+MyString &MyString::replace(size_t pos, size_t n, size_t n2, char c)
 {
     __limit(pos, n, len);
     while (capacity <= len + n2 - n + 1)
@@ -346,6 +348,10 @@ MyString &MyString::insert(size_t pos, const MyString &s, size_t pos2, size_t n2
 MyString &MyString::insert(size_t pos, const char *s, size_t pos2, size_t n2)
 {
     return replace(pos, 0, s, pos2, n2);
+}
+MyString &MyString::insert(size_t pos, size_t n, char c)
+{
+    return replace(pos, 0, n, c);
 }
 
 size_t MyString::find(const MyString &s, size_t pos) const
@@ -397,7 +403,14 @@ size_t MyString::rfind(char c, size_t pos) const
         return npos;
     return i - str;
 }
-
+size_t MyString::find_first_of(char c, size_t pos) const
+{
+    __limit(pos, len);
+    char *i = strchr(str + pos, c);
+    if (i == NULL)
+        return npos;
+    return i - str;
+}
 size_t MyString::find_first_of(const MyString &s, size_t pos) const
 {
     __limit(pos, len);
@@ -410,6 +423,14 @@ size_t MyString::find_first_of(const char *s, size_t pos) const
 {
     __limit(pos, len);
     char *i = strpbrk(str + pos, s);
+    if (i == NULL)
+        return npos;
+    return i - str;
+}
+size_t MyString::find_last_of(char c, size_t pos) const
+{
+    __limit(pos, len);
+    char *i = strrchr(str + pos, c);
     if (i == NULL)
         return npos;
     return i - str;
@@ -431,10 +452,20 @@ size_t MyString::find_last_of(const char *s, size_t pos) const
     return i - str;
 }
 
+size_t MyString::find_first_not_of(char c, size_t pos) const
+{
+    __limit(pos, len);
+    size_t i = strspn(str + pos, &c);
+    i += pos;
+    if (i == len)
+        return npos;
+    return i;
+}
 size_t MyString::find_first_not_of(const MyString &s, size_t pos) const
 {
     __limit(pos, len);
     size_t i = strspn(str + pos, s.str);
+    i += pos;
     if (i == len)
         return npos;
     return i;
@@ -443,6 +474,16 @@ size_t MyString::find_first_not_of(const char *s, size_t pos) const
 {
     __limit(pos, len);
     size_t i = strspn(str + pos, s);
+    i += pos;
+    if (i == len)
+        return npos;
+    return i;
+}
+size_t MyString::find_last_not_of(char c, size_t pos) const
+{
+    __limit(pos, len);
+    size_t i = strcspn(str + pos, &c);
+    i += pos;
     if (i == len)
         return npos;
     return i;
@@ -451,6 +492,7 @@ size_t MyString::find_last_not_of(const MyString &s, size_t pos) const
 {
     __limit(pos, len);
     size_t i = strrspn(str + pos, s.str);
+    i += pos;
     if (i == len)
         return npos;
     return i;
@@ -459,6 +501,7 @@ size_t MyString::find_last_not_of(const char *s, size_t pos) const
 {
     __limit(pos, len);
     size_t i = strrspn(str + pos, s);
+    i += pos;
     if (i == len)
         return npos;
     return i;

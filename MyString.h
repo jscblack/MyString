@@ -1,6 +1,6 @@
 /*
  * @Author       : Gehrychiang
- * @LastEditTime : 2022-05-02 10:06:12
+ * @LastEditTime : 2022-05-03 09:51:41
  * @Website      : www.yilantingfeng.site
  * @E-mail       : gehrychiang@aliyun.com
  */
@@ -24,6 +24,10 @@ class MyString
             pos = len;
         if (n == npos || n > len - pos)
             n = len - pos;
+    }
+    static int __compare(const size_t a, const size_t b)
+    {
+        return a - b;
     }
     // originate from strstr
     static char *strrstr(char *s1, const char *s2) // find the last occurrence of s2 in s1 using STRSTR
@@ -108,9 +112,9 @@ public:
     void operator=(const char *s);
     void operator=(const char);
 
-    MyString &assgin(const MyString &s, size_t pos = __pos, size_t n = npos);
-    MyString &assgin(size_t n, char c);
-    MyString &assgin(const char *s, size_t pos = __pos, size_t n = npos);
+    MyString &assign(const MyString &s, size_t pos = __pos, size_t n = npos);
+    MyString &assign(size_t n, char c);
+    MyString &assign(const char *s, size_t pos = __pos, size_t n = npos);
 
     size_t length() const;
     size_t size() const;
@@ -156,25 +160,29 @@ public:
     size_t rfind(const MyString &s, size_t pos = __pos) const;
     size_t rfind(const char *s, size_t pos = __pos) const;
 
+    size_t find_first_of(char c, size_t pos = __pos) const;
     size_t find_first_of(const MyString &s, size_t pos = __pos) const;
     size_t find_first_of(const char *s, size_t pos = __pos) const;
+    size_t find_last_of(char c, size_t pos = __pos) const;
     size_t find_last_of(const MyString &s, size_t pos = __pos) const;
     size_t find_last_of(const char *s, size_t pos = __pos) const;
 
+    size_t find_first_not_of(char c, size_t pos = __pos) const;
     size_t find_first_not_of(const MyString &s, size_t pos = __pos) const;
     size_t find_first_not_of(const char *s, size_t pos = __pos) const;
+    size_t find_last_not_of(char c, size_t pos = __pos) const;
     size_t find_last_not_of(const MyString &s, size_t pos = __pos) const;
     size_t find_last_not_of(const char *s, size_t pos = __pos) const;
 
     MyString &replace(size_t pos, size_t n, const MyString &s, size_t pos2 = __pos, size_t n2 = npos);
     MyString &replace(size_t pos, size_t n, const char *s, size_t pos2 = __pos, size_t n2 = npos);
-    MyString &replace(size_t pos, size_t n, char c, size_t n2);
+    MyString &replace(size_t pos, size_t n, size_t n2, char c);
 
     MyString &erase(size_t pos = __pos, size_t n = npos);
 
     MyString &insert(size_t pos, const MyString &s, size_t pos2 = __pos, size_t n2 = npos);
     MyString &insert(size_t pos, const char *s, size_t pos2 = __pos, size_t n2 = npos);
-    MyString &insert(size_t pos, size_t n, size_t n2, char c);
+    MyString &insert(size_t pos, size_t n, char c);
 
     friend std::ostream &operator<<(std::ostream &os, const MyString &s)
     {
