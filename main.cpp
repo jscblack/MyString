@@ -1,6 +1,6 @@
 /*
  * @Author       : Gehrychiang
- * @LastEditTime : 2022-05-03 14:09:02
+ * @LastEditTime : 2022-05-03 14:29:54
  * @Website      : www.yilantingfeng.site
  * @E-mail       : gehrychiang@aliyun.com
  */
@@ -154,19 +154,6 @@ void test12()
 }
 void test13()
 {
-    MyString src("Avatar 123 5.2 Titanic K");
-    // cout<<src<<"\n";
-    iMyStringstream istrStream(src); //建立src到istrStream的联系
-    MyString s1, s2, s3, s4, s5, s6;
-    istrStream >> s1 >> s2 >> s3 >> s4 >> s5;
-    cout << s1 << endl
-         << s2 << endl
-         << s3 << endl
-         << s4 << endl
-         << s5 << endl;
-}
-void test14()
-{
     MyString src("123 Avatar 5.2 Titanic K");
     iMyStringstream istrStream(src); //建立src到istrStream的联系
     MyString s1, s2;
@@ -184,6 +171,18 @@ void test14()
 }
 int main()
 {
-
+    test1();
+    test2();
+    test3();
+    test4();
+    test5();
+    test6();
+    test7();
+    test8();
+    test9();
+    test10();
+    test11();
+    test12();
+    test13();
     return 0;
 }
