@@ -1,13 +1,13 @@
 /*
  * @Author       : Gehrychiang
- * @LastEditTime : 2022-05-03 09:51:26
+ * @LastEditTime : 2022-05-03 12:16:49
  * @Website      : www.yilantingfeng.site
  * @E-mail       : gehrychiang@aliyun.com
  */
 #include "MyString.h"
 MyString::MyString()
 {
-    capacity = 32;
+    capacity = 64;
     str = new char[capacity];
     str[0] = '\0';
     len = 0;
@@ -129,6 +129,7 @@ size_t MyString::length() const { return len; }
 size_t MyString::size() const { return len; }
 char &MyString::operator[](size_t pos) { return str[pos]; }
 char &MyString::at(size_t pos) { return str[pos]; }
+const char *MyString::c_str() const { return (const char *)str; }
 MyString &MyString::append(const MyString &s, size_t pos, size_t n)
 {
     __limit(pos, n, s.len);
@@ -179,6 +180,7 @@ MyString &MyString::append(size_t n, char c)
 }
 MyString &MyString::operator+=(const MyString &s) { return append(s); }
 MyString &MyString::operator+=(const char *s) { return append(s); }
+MyString &MyString::operator+=(char c) { return append(1, c); }
 MyString MyString::operator+(const MyString &s) const
 {
     MyString tmp(*this);
@@ -188,6 +190,11 @@ MyString MyString::operator+(const char *s) const
 {
     MyString tmp(*this);
     return tmp.append(s);
+}
+MyString MyString::operator+(char c) const
+{
+    MyString tmp(*this);
+    return tmp.append(1, c);
 }
 
 bool MyString::operator==(const MyString &s) const
@@ -339,6 +346,15 @@ MyString &MyString::replace(size_t pos, size_t n, size_t n2, char c)
 MyString &MyString::erase(size_t pos, size_t n)
 {
     return replace(pos, n, "", 0, 0);
+}
+
+void MyString::clear()
+{
+    delete[] str;
+    capacity = 64;
+    str = new char[capacity];
+    str[0] = '\0';
+    len = 0;
 }
 
 MyString &MyString::insert(size_t pos, const MyString &s, size_t pos2, size_t n2)
@@ -505,4 +521,76 @@ size_t MyString::find_last_not_of(const char *s, size_t pos) const
     if (i == len)
         return npos;
     return i;
+}
+MyString::iterator MyString::begin()
+{
+    return iterator(str);
+}
+MyString::iterator MyString::end()
+{
+    return iterator(str + len);
+}
+MyString::const_iterator MyString::cbegin() const
+{
+    return const_iterator(str);
+}
+MyString::const_iterator MyString::cend() const
+{
+    return const_iterator(str + len);
+}
+MyString MyString::to_string(int n)
+{
+    char buf[64];
+    sprintf(buf, "%d", n);
+    MyString s(buf);
+    return s;
+}
+MyString MyString::to_string(long long n)
+{
+    char buf[64];
+    sprintf(buf, "%lld", n);
+    MyString s(buf);
+    return s;
+}
+MyString MyString::to_string(unsigned n)
+{
+    char buf[64];
+    sprintf(buf, "%u", n);
+    MyString s(buf);
+    return s;
+}
+MyString MyString::to_string(unsigned long n)
+{
+    char buf[64];
+    sprintf(buf, "%lu", n);
+    MyString s(buf);
+    return s;
+}
+MyString MyString::to_string(unsigned long long n)
+{
+    char buf[64];
+    sprintf(buf, "%llu", n);
+    MyString s(buf);
+    return s;
+}
+MyString MyString::to_string(float n)
+{
+    char buf[64];
+    sprintf(buf, "%f", n);
+    MyString s(buf);
+    return s;
+}
+MyString MyString::to_string(double n)
+{
+    char buf[64];
+    sprintf(buf, "%f", n);
+    MyString s(buf);
+    return s;
+}
+MyString MyString::to_string(long double n)
+{
+    char buf[64];
+    sprintf(buf, "%Lf", n);
+    MyString s(buf);
+    return s;
 }

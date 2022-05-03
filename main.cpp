@@ -1,10 +1,11 @@
 /*
  * @Author       : Gehrychiang
- * @LastEditTime : 2022-05-03 09:55:21
+ * @LastEditTime : 2022-05-03 14:09:02
  * @Website      : www.yilantingfeng.site
  * @E-mail       : gehrychiang@aliyun.com
  */
 #include "MyString.h"
+#include "MyStringstream.h"
 #include <iostream>
 using namespace std;
 void test1()
@@ -143,8 +144,46 @@ void test11()
     s1.insert(3, 5, 'X'); //在下标 3 处插入 5 个 'X'，s1 = "Li1XXXXX0023mitless"
     cout << s1 << endl;
 }
+void test12()
+{
+    MyString s1("Real Steel");
+    for (auto it : s1)
+    {
+        cout << it << endl;
+    }
+}
+void test13()
+{
+    MyString src("Avatar 123 5.2 Titanic K");
+    // cout<<src<<"\n";
+    iMyStringstream istrStream(src); //建立src到istrStream的联系
+    MyString s1, s2, s3, s4, s5, s6;
+    istrStream >> s1 >> s2 >> s3 >> s4 >> s5;
+    cout << s1 << endl
+         << s2 << endl
+         << s3 << endl
+         << s4 << endl
+         << s5 << endl;
+}
+void test14()
+{
+    MyString src("123 Avatar 5.2 Titanic K");
+    iMyStringstream istrStream(src); //建立src到istrStream的联系
+    MyString s1, s2;
+    int n;
+    double d;
+    char c;
+    istrStream >> n >> s1 >> d >> s2 >> c; //把src的内容当做输入流进行读取
+    oMyStringstream ostrStream;
+    ostrStream << s1 << oMyStringstream::endl
+               << s2 << oMyStringstream::endl
+               << n << oMyStringstream::endl
+               << d << oMyStringstream::endl
+               << c << oMyStringstream::endl;
+    cout << ostrStream.str();
+}
 int main()
 {
-    test8();
+
     return 0;
 }

@@ -1,11 +1,12 @@
 /*
  * @Author       : Gehrychiang
- * @LastEditTime : 2022-05-03 09:51:41
+ * @LastEditTime : 2022-05-03 11:45:18
  * @Website      : www.yilantingfeng.site
  * @E-mail       : gehrychiang@aliyun.com
  */
 #include <cstring>
 #include <iostream>
+
 class MyString
 {
     char *str;
@@ -121,14 +122,17 @@ public:
 
     char &operator[](size_t i);
     char &at(size_t i);
-
+    const char *c_str() const;
     MyString &append(const MyString &s, size_t pos = __pos, size_t n = npos);
     MyString &append(size_t n, char c);
     MyString &append(const char *s, size_t pos = __pos, size_t n = npos);
     MyString operator+(const MyString &s) const;
     MyString operator+(const char *s) const;
+    MyString operator+(const char) const;
+
     MyString &operator+=(const MyString &s);
     MyString &operator+=(const char *s);
+    MyString &operator+=(const char);
 
     bool operator==(const MyString &s) const;
     bool operator==(const char *s) const;
@@ -179,10 +183,17 @@ public:
     MyString &replace(size_t pos, size_t n, size_t n2, char c);
 
     MyString &erase(size_t pos = __pos, size_t n = npos);
-
+    void clear();
     MyString &insert(size_t pos, const MyString &s, size_t pos2 = __pos, size_t n2 = npos);
     MyString &insert(size_t pos, const char *s, size_t pos2 = __pos, size_t n2 = npos);
     MyString &insert(size_t pos, size_t n, char c);
+
+    typedef char *iterator;
+    typedef const char *const_iterator;
+    iterator begin();
+    iterator end();
+    const_iterator cbegin() const;
+    const_iterator cend() const;
 
     friend std::ostream &operator<<(std::ostream &os, const MyString &s)
     {
@@ -194,7 +205,7 @@ public:
         // init here
         if (s.str)
             delete[] s.str;
-        s.capacity = 32;
+        s.capacity = 64;
         s.str = new char[s.capacity];
         s.str[0] = '\0';
         s.len = 0;
@@ -215,4 +226,12 @@ public:
         s.str[s.len] = '\0';
         return is;
     }
+    static MyString to_string(int n);
+    static MyString to_string(long long n);
+    static MyString to_string(unsigned n);
+    static MyString to_string(unsigned long n);
+    static MyString to_string(unsigned long long n);
+    static MyString to_string(float n);
+    static MyString to_string(double n);
+    static MyString to_string(long double n);
 };
