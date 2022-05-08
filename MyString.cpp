@@ -265,8 +265,26 @@ MyString &MyString::swap(MyString &s)
     return *this;
 }
 
-int MyString::compare(const MyString &s) const { return strcmp(str, s.str); }
-int MyString::compare(const char *s) const { return strcmp(str, s); }
+int MyString::compare(const MyString &s) const 
+{
+    int res = strcmp(str, s.str); 
+    if(res < 0)
+        return -1;
+    else if(res > 0)
+        return 1;
+    else
+        return 0;
+ }
+int MyString::compare(const char *s) const
+{
+    int res = strcmp(str, s); 
+    if(res < 0)
+        return -1;
+    else if(res > 0)
+        return 1;
+    else
+        return 0;
+}
 int MyString::compare(size_t pos, size_t n, const MyString &s, size_t pos2, size_t n2) const
 {
     __limit(pos, n, len);
@@ -275,7 +293,12 @@ int MyString::compare(size_t pos, size_t n, const MyString &s, size_t pos2, size
     ret = strncmp(str + pos, s.str + pos2, std::min(n, n2));
     if (ret == 0)
         ret = __compare(n, n2);
-    return ret;
+    if(ret < 0)
+        return -1;
+    else if(ret > 0)
+        return 1;
+    else
+        return 0;
 }
 int MyString::compare(size_t pos, size_t n, const char *s, size_t pos2, size_t n2) const
 {
@@ -285,7 +308,12 @@ int MyString::compare(size_t pos, size_t n, const char *s, size_t pos2, size_t n
     ret = strncmp(str + pos, s + pos2, std::min(n, n2));
     if (ret == 0)
         ret = __compare(n, n2);
-    return ret;
+    if(ret < 0)
+        return -1;
+    else if(ret > 0)
+        return 1;
+    else
+        return 0;
 }
 
 MyString &MyString::replace(size_t pos, size_t n, const MyString &s, size_t pos2, size_t n2)
@@ -576,21 +604,21 @@ MyString MyString::to_string(unsigned long long n)
 MyString MyString::to_string(float n)
 {
     char buf[64];
-    sprintf(buf, "%f", n);
+    sprintf(buf, "%g", n);
     MyString s(buf);
     return s;
 }
 MyString MyString::to_string(double n)
 {
     char buf[64];
-    sprintf(buf, "%f", n);
+    sprintf(buf, "%g", n);
     MyString s(buf);
     return s;
 }
 MyString MyString::to_string(long double n)
 {
     char buf[64];
-    sprintf(buf, "%Lf", n);
+    sprintf(buf, "%Lg", n);
     MyString s(buf);
     return s;
 }

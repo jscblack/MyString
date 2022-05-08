@@ -4,8 +4,35 @@
  * @Website      : www.yilantingfeng.site
  * @E-mail       : gehrychiang@aliyun.com
  */
-#include <cstring>
+// #include <cstring> 不使用第三方库!!!!
 #include <iostream>
+void *memcpy(void *dest,const void* src,size_t n)
+{
+    char *d = (char *)dest;
+    const char *s = (const char *)src;
+    for (size_t i = 0; i < n; i++)
+        d[i] = s[i];
+    return dest;
+}
+static size_t strlen(const char *str)
+{
+    size_t len = 0;
+    while (str[len])
+        len++;
+    return len;
+}
+static void strcpy(char *dest, const char *src)
+{
+    while (*src)
+        *dest++ = *src++;
+    *dest = '\0';
+}
+static void strncpy(char *dest, const char *src, size_t n)
+{
+    while (n--)
+        *dest++ = *src++;
+    *dest = '\0';
+}
 
 class MyString
 {
@@ -29,6 +56,106 @@ class MyString
     static int __compare(const size_t a, const size_t b)
     {
         return a - b;
+    }
+    //cstring self-implment
+    static void strcat(char *dest, const char *src)
+    {
+        while (*dest)
+            dest++;
+        while (*src)
+            *dest++ = *src++;
+        *dest = '\0';
+    }
+    static int strcmp(const char *a, const char *b)
+    {
+        while (*a && *b && *a == *b)
+        {
+            a++;
+            b++;
+        }
+        return *a - *b;
+
+    }
+    static int strncmp(const char *a, const char *b, size_t n)
+    {
+        while (*a && *b && *a == *b && n--)
+        {
+            a++;
+            b++;
+        }
+        if(n)
+            return *a - *b;
+        else
+            return 0;
+    }
+    static char *strchr(char *str, int c)
+    {
+        while (*str && *str != c)
+            str++;
+        return *str ? str : NULL;
+    }
+    static char *strchr(const char *str, int c)
+    {
+        while (*str && *str != c)
+            str++;
+        return *str ? (char *)str : NULL;
+    }
+    static char *strrchr(char *str, int c)
+    {
+        char *p = NULL;
+        while (*str)
+        {
+            if (*str == c)
+                p = str;
+            str++;
+        }
+        return p;
+    }
+    static char *strstr(char *str,const char *sub)
+    {
+        //find substring
+        size_t len = strlen(sub);
+        while (*str)
+        {
+            if (!strncmp(str, sub, len))
+                return str;
+            str++;
+        }
+        return NULL;
+    }
+    static char *strpbrk(char *str,const char *set)
+    {
+        while (*str)
+        {
+            if (strchr(set, *str))
+                return str;
+            str++;
+        }
+        return NULL;
+    }
+    static size_t strspn(const char *str, const char *set)
+    {
+        size_t n = 0;
+        while (*str)
+        {
+            if (!strchr(set, *str))
+                return n;
+            str++;
+            n++;
+        }
+        return n;
+    }
+    static size_t strcspn(const char *str, const char *set)
+    {
+        size_t n = 0;
+        while (*str)
+        {
+            if (strchr(set, *str))
+                return n;
+            str++;
+            n++;
+        }
+        return n;
     }
     // originate from strstr
     static char *strrstr(char *s1, const char *s2) // find the last occurrence of s2 in s1 using STRSTR
